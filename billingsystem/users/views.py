@@ -4,12 +4,17 @@ from .forms import UserRegisterForm
 import cx_Oracle
 
 
-# Create your views here.
+ip='database-2.crk3wrjuujj1.ap-south-1.rds.amazonaws.com'
+port='1521'
+ser='ORCL3'
+u='rath'
+p='rathgamer660'
 
 def register(request):
+	global ip,port,ser,u,p
 	if request.method == 'POST':
-		dsn_tns = cx_Oracle.makedsn('LAPTOP-AIT9NR87', '1521', service_name='XE') 
-		conn = cx_Oracle.connect(user='SYSTEM', password='toor', dsn=dsn_tns) 
+		dsn_tns = cx_Oracle.makedsn(ip, port, service_name=ser) 
+		conn = cx_Oracle.connect(user=u, password=p, dsn=dsn_tns) 
 		c = conn.cursor()
 		form = UserRegisterForm(request.POST)	
 		if form.is_valid():
@@ -29,9 +34,10 @@ def register(request):
 
 
 def login(request):
+	global ip,port,ser,u,p
 	if request.method=='POST':
-		dsn_tns = cx_Oracle.makedsn('LAPTOP-AIT9NR87', '1521', service_name='XE') 
-		conn = cx_Oracle.connect(user='SYSTEM', password='toor', dsn=dsn_tns) 
+		dsn_tns = cx_Oracle.makedsn(ip, port, service_name=ser) 
+		conn = cx_Oracle.connect(user=u, password=p, dsn=dsn_tns) 
 		cx = conn.cursor()
 		username=request.POST.get('username')
 		password=request.POST.get('password')

@@ -9,10 +9,17 @@ from datetime import datetime
 login_=False
 ide=1
 usr = None
+ip='database-2.crk3wrjuujj1.ap-south-1.rds.amazonaws.com'
+port='1521'
+ser='ORCL3'
+u='rath'
+p='rathgamer660'
+
 def register(request):
+	global ip,port,ser,u,p
 	if request.method == 'POST':
-		dsn_tns = cx_Oracle.makedsn('LAPTOP-AIT9NR87', '1521', service_name='XE') 
-		conn = cx_Oracle.connect(user='SYSTEM', password='toor', dsn=dsn_tns) 
+		dsn_tns = cx_Oracle.makedsn(ip, port, service_name=ser) 
+		conn = cx_Oracle.connect(user=u, password=p, dsn=dsn_tns) 
 		c = conn.cursor()
 		form = UserRegisterForm(request.POST)	
 		if form.is_valid():
@@ -32,10 +39,11 @@ def register(request):
 
 
 def login(request):
+	global ip,port,ser,u,p
 	if request.method=='POST':
 		global login_
-		dsn_tns = cx_Oracle.makedsn('LAPTOP-AIT9NR87', '1521', service_name='XE') 
-		conn = cx_Oracle.connect(user='SYSTEM', password='toor', dsn=dsn_tns) 
+		dsn_tns = cx_Oracle.makedsn(ip, port, service_name=ser) 
+		conn = cx_Oracle.connect(user=u, password=p, dsn=dsn_tns) 
 		cx = conn.cursor()
 		username=request.POST.get('username')
 		global usr
@@ -59,6 +67,7 @@ def login(request):
 
 
 def logout(request):
+	global ip,port,ser,u,p
 	global login_
 	global usr
 	login_=False
@@ -67,17 +76,19 @@ def logout(request):
 	return redirect('Bill-home')
 
 def home(request):	
+	global ip,port,ser,u,p
 	if login_== True:
 		return render(request,'belikebill/home.html',{'username':usr})
 	else:
 		return redirect('login')
 
 def addsupplier(request):
+	global ip,port,ser,u,p
 	if login_==True:
 		if request.method=='POST':
 			global usr
-			dsn_tns = cx_Oracle.makedsn('LAPTOP-AIT9NR87', '1521', service_name='XE') 
-			conn = cx_Oracle.connect(user='SYSTEM', password='toor', dsn=dsn_tns) 
+			dsn_tns = cx_Oracle.makedsn(ip, port, service_name=ser) 
+			conn = cx_Oracle.connect(user=u, password=p, dsn=dsn_tns) 
 			cx = conn.cursor()
 			supplier={}
 			for i in ['suppliername','address','phone','gst']:
@@ -98,6 +109,7 @@ bill=[]
 total=0
 
 def billing(request):
+	global ip,port,ser,u,p
 	if login_==True:
 		global total
 		global bill
@@ -108,8 +120,8 @@ def billing(request):
 			product['quantity']=int(product['quantity'])
 			flag=0
 			flag1=0
-			dsn_tns = cx_Oracle.makedsn('LAPTOP-AIT9NR87', '1521', service_name='XE') 
-			conn = cx_Oracle.connect(user='SYSTEM', password='toor', dsn=dsn_tns) 
+			dsn_tns = cx_Oracle.makedsn(ip, port, service_name=ser) 
+			conn = cx_Oracle.connect(user=u, password=p, dsn=dsn_tns) 
 			cx = conn.cursor()
 			cx.prepare('select * from product where username=:usr and name=:name')
 			cx.execute(None,{'usr':usr,'name':product['name']})
@@ -133,8 +145,8 @@ def billing(request):
 				product[i] = request.POST.get(i)
 			product['quantity']=int(product['quantity'])
 			flag=0
-			dsn_tns = cx_Oracle.makedsn('LAPTOP-AIT9NR87', '1521', service_name='XE') 
-			conn = cx_Oracle.connect(user='SYSTEM', password='toor', dsn=dsn_tns) 
+			dsn_tns = cx_Oracle.makedsn(ip, port, service_name=ser) 
+			conn = cx_Oracle.connect(user=u, password=p, dsn=dsn_tns) 
 			cx = conn.cursor()
 			cx.prepare('select * from product where username=:usr and name=:name')
 			cx.execute(None,{'usr':usr,'name':product['name']})
@@ -167,12 +179,13 @@ def billing(request):
 
 
 def inventory(request):
+	global ip,port,ser,u,p
 	if login_==True:
 		if request.method=='POST':
 			global usr
-			dsn_tns = cx_Oracle.makedsn('LAPTOP-AIT9NR87', '1521', service_name='XE') 
-			conn1 = cx_Oracle.connect(user='SYSTEM', password='toor', dsn=dsn_tns) 
-			conn = cx_Oracle.connect(user='SYSTEM', password='toor', dsn=dsn_tns) 
+			dsn_tns = cx_Oracle.makedsn(ip, port, service_name=ser) 
+			conn1 = cx_Oracle.connect(user=u, password=p, dsn=dsn_tns) 
+			conn = cx_Oracle.connect(user=u, password=p, dsn=dsn_tns) 
 			cx = conn.cursor()
 			c = conn1.cursor()
 			product={}
